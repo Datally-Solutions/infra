@@ -14,5 +14,4 @@ jobs:
       working_directory: "."
       state_prefix: "infra"
       has_tfvars: "true"
-    secrets:
-      TF_VARS: ${{ secrets.TF_VARS }}
+    secrets: inherit
