@@ -193,6 +193,7 @@ resource "google_project_iam_custom_role" "cicd_role" {
     "iam.serviceAccounts.update",
     "iam.serviceAccounts.getAccessToken",
     "iam.serviceAccounts.getIamPolicy",
+    "iam.serviceAccounts.setIamPolicy",
     "iam.workloadIdentityPoolProviders.create",
     "iam.workloadIdentityPoolProviders.delete",
     "iam.workloadIdentityPoolProviders.get",
