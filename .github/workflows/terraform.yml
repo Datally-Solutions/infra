@@ -6,6 +6,7 @@ on:
   pull_request:
     branches: [main]
 
+
 jobs:
   terraform:
     uses: Datally-Solutions/cicd/.github/workflows/reusable-terraform.yml@main
