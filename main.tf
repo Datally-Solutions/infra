@@ -178,6 +178,8 @@ resource "google_project_iam_custom_role" "cicd_role" {
   stage       = "GA"
 
   permissions = [
+
+    "resourcemanager.projects.get",
     # APIs
     "serviceusage.services.enable",
     "serviceusage.services.disable",
