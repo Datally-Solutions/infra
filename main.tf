@@ -15,8 +15,8 @@ terraform {
 }
 
 provider "google" {
-  project = var.project_id
-  region  = var.region
+  project = var.GCP_PROJECT_ID
+  region  = var.GCP_REGION
 }
 
 # -------------------------------------------------------
@@ -80,7 +80,7 @@ resource "google_secret_manager_secret" "ingest_token" {
   replication {
     user_managed {
       replicas {
-        location = var.region
+        location = var.GCP_REGION
       }
     }
   }
@@ -102,13 +102,13 @@ resource "google_service_account" "function_sa" {
 }
 
 resource "google_project_iam_member" "function_bigquery_editor" {
-  project = var.project_id
+  project = var.GCP_PROJECT_ID
   role    = "roles/bigquery.dataEditor"
   member  = "serviceAccount:${google_service_account.function_sa.email}"
 }
 
 resource "google_project_iam_member" "function_bigquery_job" {
-  project = var.project_id
+  project = var.GCP_PROJECT_ID
   role    = "roles/bigquery.jobUser"
   member  = "serviceAccount:${google_service_account.function_sa.email}"
 }
@@ -142,6 +142,8 @@ resource "google_iam_workload_identity_pool_provider" "github" {
     "google.subject"       = "assertion.sub"
     "attribute.actor"      = "assertion.actor"
     "attribute.repository" = "assertion.repository"
+    "attribute.aud"       = "assertion.aud" 
+    "attribute.repository_owner" = "assertion.repository_owner"
   }
 
   # Only allow your GitHub org/repos
@@ -194,6 +196,7 @@ resource "google_project_iam_custom_role" "cicd_role" {
     "iam.serviceAccounts.get",
     "iam.serviceAccounts.list",
     "iam.serviceAccounts.update",
+    "iam.serviceAccounts.getAccessToken",
     "iam.workloadIdentityPoolProviders.create",
     "iam.workloadIdentityPoolProviders.delete",
     "iam.workloadIdentityPoolProviders.get",
@@ -294,14 +297,14 @@ resource "google_project_iam_custom_role" "cicd_role" {
 
 # Assign custom role to CI/CD SA
 resource "google_project_iam_member" "cicd_custom_role" {
-  project = var.project_id
+  project = var.GCP_PROJECT_ID
   role    = google_project_iam_custom_role.cicd_role.id
   member  = "serviceAccount:${google_service_account.cicd_sa.email}"
 }
 
 # GCS bucket for Terraform state
 resource "google_storage_bucket" "tfstate" {
-  name                        = "${var.project_id}-tfstate"
+  name                        = "${var.GCP_PROJECT_ID}-tfstate"
   location                    = "EU"
   force_destroy               = false
   uniform_bucket_level_access = true

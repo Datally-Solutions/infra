@@ -1,9 +1,9 @@
-variable "project_id" {
+variable "GCP_PROJECT_ID" {
   description = "GCP Project ID"
   type        = string
 }
 
-variable "region" {
+variable "GCP_REGION" {
   description = "GCP region"
   type        = string
   default     = "europe-west9"
