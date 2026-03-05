@@ -14,10 +14,9 @@ jobs:
       working_directory: "."
       state_prefix: "infra"
       has_tfvars: "true"
-    secrets: inherit
-   # secrets:
-    #  WIF_PROVIDER: ${{ secrets.WIF_PROVIDER }}
-     # CICD_SA_EMAIL: ${{ secrets.CICD_SA_EMAIL }}
-      #GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-      #TFSTATE_BUCKET: ${{ secrets.TFSTATE_BUCKET }}
-      #TF_VARS: ${{ secrets.TF_VARS }}
+    secrets:
+      WIF_PROVIDER_S: ${{ secrets.WIF_PROVIDER }}
+      CICD_SA_EMAIL_S: ${{ secrets.CICD_SA_EMAIL }}
+      GCP_PROJECT_ID_S: ${{ secrets.GCP_PROJECT_ID }}
+      TFSTATE_BUCKET_S: ${{ secrets.TFSTATE_BUCKET }}
+      TF_VARS_S: ${{ secrets.TF_VARS }}
