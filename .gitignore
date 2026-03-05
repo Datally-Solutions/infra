@@ -1,0 +1,15 @@
+# Terraform state
+*.tfstate
+*.tfstate.backup
+*.tfstate.lock.info
+.terraform/
+.terraform.lock.hcl
+
+# Secrets — never commit these
+terraform.tfvars
+
+# Compiled zips
+modules/functions/tmp/*.zip
+
+# OS
+.DS_Store

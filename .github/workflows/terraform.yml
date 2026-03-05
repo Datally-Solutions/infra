@@ -1,0 +1,20 @@
+name: Terraform Infra
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  terraform:
+    uses: Datally-Solutions/cicd/.github/workflows/reusable-terraform.yml@main
+    with:
+      working_directory: "."
+      state_prefix: "infra"
+    secrets:
+      WIF_PROVIDER: ${{ secrets.WIF_PROVIDER }}
+      CICD_SA_EMAIL: ${{ secrets.CICD_SA_EMAIL }}
+      GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+      TFSTATE_BUCKET: ${{ secrets.TFSTATE_BUCKET }}
+      TF_VARS: ${{ secrets.TF_VARS }}

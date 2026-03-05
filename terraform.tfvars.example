@@ -1,0 +1,3 @@
+project_id   = "cat-litter-monitor"
+region       = "europe-west9"
+ingest_token = "generate-a-strong-random-token-here"
