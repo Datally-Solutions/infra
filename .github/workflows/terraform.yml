@@ -15,8 +15,4 @@ jobs:
       state_prefix: "infra"
       has_tfvars: "true"
     secrets:
-      WIF_PROVIDER_S: ${{ secrets.WIF_PROVIDER }}
-      CICD_SA_EMAIL_S: ${{ secrets.CICD_SA_EMAIL }}
-      GCP_PROJECT_ID_S: ${{ secrets.GCP_PROJECT_ID }}
-      TFSTATE_BUCKET_S: ${{ secrets.TFSTATE_BUCKET }}
-      TF_VARS_S: ${{ secrets.TF_VARS }}
+      TF_VARS: ${{ secrets.TF_VARS }}
