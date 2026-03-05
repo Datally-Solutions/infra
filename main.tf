@@ -162,7 +162,7 @@ resource "google_service_account" "cicd_sa" {
 resource "google_service_account_iam_member" "github_wif" {
   service_account_id = google_service_account.cicd_sa.name
   role               = "roles/iam.workloadIdentityUser"
-  member             = "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.github.name}/attribute.repository_owner/YOUR_GITHUB_ORG"
+  member             = "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.github.name}/attribute.repository_owner/Datally-Solutions"
 }
 
 # Permissions needed by Terraform to manage infra
