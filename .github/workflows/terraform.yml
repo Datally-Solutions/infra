@@ -12,6 +12,7 @@ jobs:
     with:
       working_directory: "."
       state_prefix: "infra"
+      has_tfvars: "true"
     secrets:
       WIF_PROVIDER: ${{ secrets.WIF_PROVIDER }}
       CICD_SA_EMAIL: ${{ secrets.CICD_SA_EMAIL }}
