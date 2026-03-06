@@ -93,31 +93,6 @@ resource "google_secret_manager_secret_version" "ingest_token" {
   secret_data = var.ingest_token
 }
 
-# -------------------------------------------------------
-# Service Account for Cloud Function
-# -------------------------------------------------------
-resource "google_service_account" "function_sa" {
-  account_id   = "litter-function-sa"
-  display_name = "Cat Litter Function SA"
-}
-
-resource "google_project_iam_member" "function_bigquery_editor" {
-  project = var.GCP_PROJECT_ID
-  role    = "roles/bigquery.dataEditor"
-  member  = "serviceAccount:${google_service_account.function_sa.email}"
-}
-
-resource "google_project_iam_member" "function_bigquery_job" {
-  project = var.GCP_PROJECT_ID
-  role    = "roles/bigquery.jobUser"
-  member  = "serviceAccount:${google_service_account.function_sa.email}"
-}
-
-resource "google_secret_manager_secret_iam_member" "function_secret_access" {
-  secret_id = google_secret_manager_secret.ingest_token.id
-  role      = "roles/secretmanager.secretAccessor"
-  member    = "serviceAccount:${google_service_account.function_sa.email}"
-}
 
 # -------------------------------------------------------
 # Workload Identity Federation for GitHub Actions

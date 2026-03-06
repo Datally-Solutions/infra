@@ -3,11 +3,6 @@ output "bigquery_table" {
   value       = "${var.GCP_PROJECT_ID}.${google_bigquery_dataset.litiere.dataset_id}.${google_bigquery_table.events.table_id}"
 }
 
-output "function_sa_email" {
-  description = "Service account email used by Cloud Functions"
-  value       = google_service_account.function_sa.email
-}
-
 output "wif_provider" {
   description = "Workload Identity Provider — use in GitHub Actions"
   value       = google_iam_workload_identity_pool_provider.github.name
