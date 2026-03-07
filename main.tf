@@ -181,6 +181,11 @@ resource "google_project_iam_custom_role" "cicd_role" {
     "iam.workloadIdentityPools.get",
     "iam.workloadIdentityPools.update",
 
+    # Cloud Build — trigger builds
+    "cloudbuild.builds.create",
+    "cloudbuild.builds.get",
+    "cloudbuild.builds.list",
+
     # IAM policy bindings
     "resourcemanager.projects.getIamPolicy",
     "resourcemanager.projects.setIamPolicy",
@@ -297,4 +302,24 @@ resource "google_storage_bucket" "tfstate" {
       type = "Delete"
     }
   }
+}
+
+resource "google_artifact_registry_repository" "api" {
+  location      = var.GCP_REGION
+  repository_id = "${var.GCP_PROJECT_ID}-registry-docker"
+  format        = "DOCKER"
+}
+
+resource "google_artifact_registry_repository_iam_member" "cloudbuild_push" {
+  project    = var.GCP_PROJECT_ID
+  location   = var.GCP_REGION
+  repository = google_artifact_registry_repository.api.name
+  role       = "roles/artifactregistry.writer"
+  member     = "serviceAccount:${data.google_project.project.number}@cloudbuild.gserviceaccount.com"
+}
+
+resource "google_service_account_iam_member" "cloudbuild_sa_user" {
+  service_account_id = google_service_account.function_sa.name
+  role               = "roles/iam.serviceAccountUser"
+  member             = "serviceAccount:${data.google_project.project.number}@cloudbuild.gserviceaccount.com"
 }
