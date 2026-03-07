@@ -30,6 +30,8 @@ resource "google_project_service" "apis" {
     "secretmanager.googleapis.com",
     "run.googleapis.com",
     "artifactregistry.googleapis.com",
+    "cloudscheduler.googleapis.com",
+    "pubsub.googleapis.com"
   ])
 
   service            = each.key
