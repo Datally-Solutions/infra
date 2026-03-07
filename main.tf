@@ -260,6 +260,8 @@ resource "google_project_iam_custom_role" "cicd_role" {
     "cloudscheduler.jobs.get",
     "cloudscheduler.jobs.list",
     "cloudscheduler.jobs.update",
+    "cloudscheduler.jobs.enable",
+    "cloudscheduler.jobs.disable",
 
     # Artifact Registry (needed by Cloud Functions v2 build)
     "artifactregistry.repositories.create",
