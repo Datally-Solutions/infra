@@ -280,6 +280,7 @@ resource "google_project_iam_custom_role" "cicd_role" {
     "artifactregistry.repositories.update",
     "artifactregistry.repositories.getIamPolicy",
     "artifactregistry.repositories.setIamPolicy",
+    "articactregistry.repositories.downloadArtifacts",
   ]
 }
 
