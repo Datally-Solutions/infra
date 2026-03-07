@@ -19,6 +19,11 @@ provider "google" {
   region  = var.GCP_REGION
 }
 
+# Data source to get project number
+data "google_project" "project" {
+  project_id = var.GCP_PROJECT_ID
+}
+
 # -------------------------------------------------------
 # APIs
 # -------------------------------------------------------
@@ -316,10 +321,4 @@ resource "google_artifact_registry_repository_iam_member" "cloudbuild_push" {
   repository = google_artifact_registry_repository.api.name
   role       = "roles/artifactregistry.writer"
   member     = "serviceAccount:${data.google_project.project.number}@cloudbuild.gserviceaccount.com"
-}
-
-resource "google_service_account_iam_member" "cloudbuild_sa_user" {
-  service_account_id = google_service_account.function_sa.name
-  role               = "roles/iam.serviceAccountUser"
-  member             = "serviceAccount:${data.google_project.project.number}@cloudbuild.gserviceaccount.com"
 }
