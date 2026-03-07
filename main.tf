@@ -61,6 +61,7 @@ resource "google_bigquery_table" "events" {
   clustering = ["chat", "action"]
 
   schema = jsonencode([
+    { name = "device_id",   type = "STRING",    mode = "NULLABLE" },
     { name = "timestamp",  type = "TIMESTAMP", mode = "REQUIRED" },
     { name = "chat",       type = "STRING",    mode = "REQUIRED" },
     { name = "action",     type = "STRING",    mode = "REQUIRED" },
