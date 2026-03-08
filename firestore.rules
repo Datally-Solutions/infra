@@ -1,0 +1,31 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isAdmin(householdId) {
+      return request.auth != null &&
+        request.auth.uid == get(/databases/$(database)/documents/households/$(householdId)).data.admin_uid;
+    }
+
+    function isMember(householdId) {
+      return request.auth != null &&
+        request.auth.uid in get(/databases/$(database)/documents/households/$(householdId)).data.member_uids;
+    }
+
+    function isAdminOrMember(householdId) {
+      return isAdmin(householdId) || isMember(householdId);
+    }
+
+    match /households/{householdId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null
+        && request.resource.data.admin_uid == request.auth.uid;
+      allow update: if isAdminOrMember(householdId);
+      allow delete: if isAdmin(householdId);
+
+      match /{subcollection=**} {
+        allow read, write: if isAdminOrMember(householdId);
+      }
+    }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "firestore": {
+    "database": "cat-litter-monitor-firestore",
+    "location": "europe-west9",
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  }
+}
