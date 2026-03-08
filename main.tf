@@ -68,14 +68,14 @@ resource "google_bigquery_table" "events" {
   clustering = ["chat", "action"]
 
   schema = jsonencode([
-    { name = "device_id",   type = "STRING",    mode = "NULLABLE" },
-    { name = "timestamp",  type = "TIMESTAMP", mode = "REQUIRED" },
-    { name = "chat",       type = "STRING",    mode = "REQUIRED" },
-    { name = "action",     type = "STRING",    mode = "REQUIRED" },
-    { name = "poids",      type = "FLOAT64",   mode = "NULLABLE" },
-    { name = "poids_chat", type = "FLOAT64",   mode = "NULLABLE" },
-    { name = "duree",      type = "INT64",     mode = "NULLABLE" },
-    { name = "alerte",     type = "STRING",    mode = "NULLABLE" }
+    { name = "device_id", type = "STRING", mode = "NULLABLE" },
+    { name = "timestamp", type = "TIMESTAMP", mode = "REQUIRED" },
+    { name = "chat", type = "STRING", mode = "REQUIRED" },
+    { name = "action", type = "STRING", mode = "REQUIRED" },
+    { name = "poids", type = "FLOAT64", mode = "NULLABLE" },
+    { name = "poids_chat", type = "FLOAT64", mode = "NULLABLE" },
+    { name = "duree", type = "INT64", mode = "NULLABLE" },
+    { name = "alerte", type = "STRING", mode = "NULLABLE" }
   ])
 }
 
@@ -122,10 +122,10 @@ resource "google_iam_workload_identity_pool_provider" "github" {
   display_name                       = "GitHub Provider"
 
   attribute_mapping = {
-    "google.subject"       = "assertion.sub"
-    "attribute.actor"      = "assertion.actor"
-    "attribute.repository" = "assertion.repository"
-    "attribute.aud"       = "assertion.aud" 
+    "google.subject"             = "assertion.sub"
+    "attribute.actor"            = "assertion.actor"
+    "attribute.repository"       = "assertion.repository"
+    "attribute.aud"              = "assertion.aud"
     "attribute.repository_owner" = "assertion.repository_owner"
   }
 
@@ -324,4 +324,64 @@ resource "google_artifact_registry_repository_iam_member" "cloudbuild_push" {
   repository = google_artifact_registry_repository.api.name
   role       = "roles/artifactregistry.writer"
   member     = "serviceAccount:${data.google_project.project.number}@cloudbuild.gserviceaccount.com"
+}
+
+resource "google_firestore_database" "main" {
+  project     = var.GCP_PROJECT_ID
+  name        = "${var.GCP_PROJECT_ID}-firestore"
+  location_id = var.GCP_REGION
+  type        = "FIRESTORE_NATIVE"
+
+  deletion_policy = "ABANDON"
+}
+
+resource "google_firestore_index" "health_alerts_cat_alert_timestamp" {
+  project    = var.GCP_PROJECT_ID
+  database   = google_firestore_database.main.name
+  collection = "health_alerts"
+
+  fields {
+    field_path = "alert_type"
+    order      = "ASCENDING"
+  }
+
+  fields {
+    field_path = "cat_id"
+    order      = "ASCENDING"
+  }
+
+  fields {
+    field_path = "timestamp"
+    order      = "ASCENDING"
+  }
+
+  fields {
+    field_path = "__name__"
+    order      = "ASCENDING"
+  }
+
+  query_scope = "COLLECTION"
+}
+
+resource "google_firestore_index" "health_alerts_acknowledged_timestamp" {
+  project    = var.GCP_PROJECT_ID
+  database   = google_firestore_database.main.name
+  collection = "health_alerts"
+
+  fields {
+    field_path = "acknowledged"
+    order      = "ASCENDING"
+  }
+
+  fields {
+    field_path = "timestamp"
+    order      = "DESCENDING"
+  }
+
+  fields {
+    field_path = "__name__"
+    order      = "DESCENDING"
+  }
+
+  query_scope = "COLLECTION"
 }
