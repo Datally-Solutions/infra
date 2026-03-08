@@ -281,6 +281,19 @@ resource "google_project_iam_custom_role" "cicd_role" {
     "artifactregistry.repositories.getIamPolicy",
     "artifactregistry.repositories.setIamPolicy",
     "artifactregistry.repositories.downloadArtifacts",
+
+    # Firestore database
+    "datastore.databases.get",
+    "datastore.databases.list",
+    "datastore.databases.update",
+
+    # Firestore indexes
+    "datastore.indexes.create",
+    "datastore.indexes.delete",
+    "datastore.indexes.get",
+    "datastore.indexes.list",
+    "datastore.indexes.update",
+
   ]
 }
 
