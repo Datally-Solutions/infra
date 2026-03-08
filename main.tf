@@ -306,6 +306,18 @@ resource "google_project_iam_custom_role" "cicd_role" {
   ]
 }
 
+resource "google_project_iam_member" "cicd_firestore_admin" {
+  project = var.GCP_PROJECT_ID
+  role    = "roles/datastore.owner"
+  member  = "serviceAccount:${google_service_account.cicd_sa.email}"
+}
+
+resource "google_project_iam_member" "cicd_firestore_admin" {
+  project = var.GCP_PROJECT_ID
+  role    = "roles/firebase.admin"
+  member  = "serviceAccount:${google_service_account.cicd_sa.email}"
+}
+
 # Assign custom role to CI/CD SA
 resource "google_project_iam_member" "cicd_custom_role" {
   project = var.GCP_PROJECT_ID
