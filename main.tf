@@ -36,7 +36,11 @@ resource "google_project_service" "apis" {
     "run.googleapis.com",
     "artifactregistry.googleapis.com",
     "cloudscheduler.googleapis.com",
-    "pubsub.googleapis.com"
+    "pubsub.googleapis.com",
+    "firebase.googleapis.com",
+    "serviceusage.googleapis.com",
+    "cloudbilling.googleapis.com",
+    "cloudresourcemanager.googleapis.com",
   ])
 
   service            = each.key
@@ -284,6 +288,7 @@ resource "google_project_iam_custom_role" "cicd_role" {
 
     # Firestore database
     "datastore.databases.get",
+    "datastore.databases.getMetadata",
     "datastore.databases.list",
     "datastore.databases.update",
 
