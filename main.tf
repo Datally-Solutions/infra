@@ -419,3 +419,21 @@ resource "google_firestore_index" "health_alerts_acknowledged_timestamp" {
 
   query_scope = "COLLECTION"
 }
+
+resource "google_firestore_field" "events_ttl" {
+  project    = var.GCP_PROJECT_ID
+  database   = google_firestore_database.main.name
+  collection = "events"
+  field      = "expire_at"
+
+  ttl_config {}
+}
+
+resource "google_firestore_field" "health_alerts_ttl" {
+  project    = var.GCP_PROJECT_ID
+  database   = google_firestore_database.main.name
+  collection = "health_alerts"
+  field      = "expire_at"
+
+  ttl_config {}
+}
