@@ -437,3 +437,28 @@ resource "google_firestore_field" "health_alerts_ttl" {
 
   ttl_config {}
 }
+
+resource "google_storage_bucket" "firmware" {
+  name          = "${var.GCP_PROJECT_ID}-firmware"
+  location      = var.GCP_REGION
+  force_destroy = false
+
+  versioning {
+    enabled = true
+  }
+
+  lifecycle_rule {
+    condition {
+      num_newer_versions = 10 # keep last 10 versions
+    }
+    action {
+      type = "Delete"
+    }
+  }
+}
+
+resource "google_storage_bucket_iam_member" "firmware_public" {
+  bucket = google_storage_bucket.firmware.name
+  role   = "roles/storage.objectViewer"
+  member = "allUsers"
+}
