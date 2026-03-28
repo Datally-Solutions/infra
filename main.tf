@@ -103,7 +103,8 @@ resource "google_bigquery_table" "raw_sessions" {
     { name = "device_id", type = "STRING", mode = "NULLABLE" },
     { name = "entry_weight_kg", type = "FLOAT64", mode = "NULLABLE" },
     { name = "exit_weight_delta_g", type = "FLOAT64", mode = "NULLABLE" },
-    { name = "duration_seconds", type = "INT64", mode = "NULLABLE" }
+    { name = "duration_seconds", type = "INT64", mode = "NULLABLE" },
+    { name = "raw_session_id", type = "STRING", mode = "NULLABLE" }
   ])
 }
 
