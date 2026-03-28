@@ -59,9 +59,9 @@ resource "google_bigquery_dataset" "litiere" {
   depends_on = [google_project_service.apis]
 }
 
-resource "google_bigquery_table" "events" {
+resource "google_bigquery_table" "classified_events" {
   dataset_id          = google_bigquery_dataset.litiere.dataset_id
-  table_id            = "events"
+  table_id            = "classified_events"
   deletion_protection = false
 
   time_partitioning {
@@ -69,17 +69,41 @@ resource "google_bigquery_table" "events" {
     field = "timestamp"
   }
 
-  clustering = ["chat", "action"]
+  clustering = ["device_id", "action"]
 
   schema = jsonencode([
-    { name = "device_id", type = "STRING", mode = "NULLABLE" },
     { name = "timestamp", type = "TIMESTAMP", mode = "REQUIRED" },
+    { name = "device_id", type = "STRING", mode = "NULLABLE" },
     { name = "chat", type = "STRING", mode = "REQUIRED" },
     { name = "action", type = "STRING", mode = "REQUIRED" },
     { name = "poids", type = "FLOAT64", mode = "NULLABLE" },
     { name = "poids_chat", type = "FLOAT64", mode = "NULLABLE" },
     { name = "duree", type = "INT64", mode = "NULLABLE" },
-    { name = "alerte", type = "STRING", mode = "NULLABLE" }
+    { name = "alerte", type = "STRING", mode = "NULLABLE" },
+    { name = "raw_session_id", type = "STRING", mode = "NULLABLE" },
+    { name = "classifier_version", type = "STRING", mode = "NULLABLE" },
+    { name = "action_confirme", type = "STRING", mode = "NULLABLE" },
+    { name = "chat_confirme", type = "STRING", mode = "NULLABLE" },
+    { name = "session_valide", type = "BOOL", mode = "NULLABLE" }
+  ])
+}
+
+resource "google_bigquery_table" "raw_sessions" {
+  dataset_id          = google_bigquery_dataset.litiere.dataset_id
+  table_id            = "raw_sessions"
+  deletion_protection = false
+
+  time_partitioning {
+    type  = "DAY"
+    field = "timestamp"
+  }
+
+  schema = jsonencode([
+    { name = "timestamp", type = "TIMESTAMP", mode = "REQUIRED" },
+    { name = "device_id", type = "STRING", mode = "NULLABLE" },
+    { name = "entry_weight_kg", type = "FLOAT64", mode = "NULLABLE" },
+    { name = "exit_weight_delta_g", type = "FLOAT64", mode = "NULLABLE" },
+    { name = "duration_seconds", type = "INT64", mode = "NULLABLE" }
   ])
 }
 
