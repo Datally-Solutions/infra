@@ -1,6 +1,6 @@
 output "bigquery_table" {
   description = "Full BigQuery table reference"
-  value       = "${var.GCP_PROJECT_ID}.${google_bigquery_dataset.litiere.dataset_id}.${google_bigquery_table.events.table_id}"
+  value       = "${var.GCP_PROJECT_ID}.${google_bigquery_dataset.litiere.dataset_id}.${google_bigquery_table.classified_events.table_id}"
 }
 
 output "wif_provider" {
