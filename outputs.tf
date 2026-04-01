@@ -30,5 +30,5 @@ output "tfstate_bucket" {
 
 output "firestore_database" {
   description = "Firestore database name"
-  value       = google_firestore_database.litiere.name
+  value       = google_firestore_database.main.name
 }
