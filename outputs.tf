@@ -4,13 +4,13 @@ output "bigquery_dataset_litiere" {
 }
 
 output "bigquery_table_classified_events" {
-  description = "Full BigQuery table reference"
-  value       = "${var.GCP_PROJECT_ID}.${google_bigquery_dataset.litiere.dataset_id}.${google_bigquery_table.classified_events.table_id}"
+  description = "BigQuery classified events table name"
+  value       = google_bigquery_table.classified_events.table_id
 }
 
 output "bigquery_table_raw_sessions" {
-  description = "Full BigQuery table reference"
-  value       = "${var.GCP_PROJECT_ID}.${google_bigquery_dataset.litiere.dataset_id}.${google_bigquery_table.raw_sessions.table_id}"
+  description = "BigQuery raw sessions table name"
+  value       = google_bigquery_table.raw_sessions.table_id
 }
 
 output "wif_provider" {
