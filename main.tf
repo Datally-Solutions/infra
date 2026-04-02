@@ -471,3 +471,37 @@ resource "google_storage_bucket_iam_member" "firmware_public" {
   role   = "roles/storage.objectViewer"
   member = "allUsers"
 }
+
+#########################################################################
+## Google BigQuery Definition
+#########################################################################
+
+resource "google_bigquery_dataset" "logs_dataset" {
+  dataset_id  = "device_logs"
+  description = "Dataset for device logs"
+  location    = var.GCP_REGION
+  project     = var.GCP_PROJECT_ID
+}
+
+resource "google_logging_project_sink" "bigquery_sink_device_logs" {
+  name        = "bigquery-sink"
+  destination = "bigquery.googleapis.com/projects/${var.GCP_PROJECT_ID}/datasets/${google_bigquery_dataset.logs_dataset.dataset_id}"
+  filter      = "logName=~\"projects/${var.GCP_PROJECT_ID}/logs/litiere-device-\" AND severity >= ERROR"
+
+  unique_writer_identity = true
+  project                = var.GCP_PROJECT_ID
+
+  bigquery_options {
+    use_partitioned_tables = true # always true if it is false, logs cant export to the bigquery
+  }
+}
+
+resource "google_bigquery_dataset_iam_binding" "bigquery_writer" {
+  project    = var.GCP_PROJECT_ID
+  dataset_id = google_bigquery_dataset.logs_dataset.dataset_id
+  role       = "roles/bigquery.dataEditor"
+  members = [
+    google_logging_project_sink.bigquery_sink.writer_identity,
+  ]
+  depends_on = [google_bigquery_dataset.logs_dataset]
+}

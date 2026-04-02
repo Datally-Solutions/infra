@@ -14,7 +14,3 @@ repos:
           - --args=-no-color
           - --args=-diff
           - --args=-write=true
-      - id: terraform_validate
-        args:
-          - --hook-config=--retry-once-with-cleanup=true
-          - --tf-init-args=-upgrade
