@@ -312,6 +312,12 @@ resource "google_project_iam_custom_role" "cicd_role" {
     "datastore.indexes.list",
     "datastore.indexes.update",
 
+    "logging.sinks.create",
+    "logging.sinks.delete",
+    "logging.sinks.get",
+    "logging.sinks.list",
+    "logging.sinks.update",
+
   ]
 }
 
