@@ -501,7 +501,7 @@ resource "google_bigquery_dataset_iam_binding" "bigquery_writer" {
   dataset_id = google_bigquery_dataset.logs_dataset.dataset_id
   role       = "roles/bigquery.dataEditor"
   members = [
-    google_logging_project_sink.bigquery_sink.writer_identity,
+    google_logging_project_sink.bigquery_sink_device_logs.writer_identity,
   ]
   depends_on = [google_bigquery_dataset.logs_dataset]
 }
