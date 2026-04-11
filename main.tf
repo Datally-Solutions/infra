@@ -454,9 +454,10 @@ resource "google_firestore_field" "health_alerts_ttl" {
 }
 
 resource "google_storage_bucket" "firmware" {
-  name          = "${var.GCP_PROJECT_ID}-firmware"
-  location      = var.GCP_REGION
-  force_destroy = false
+  name                        = "${var.GCP_PROJECT_ID}-firmware"
+  location                    = var.GCP_REGION
+  force_destroy               = false
+  uniform_bucket_level_access = false
 
   versioning {
     enabled = true
@@ -470,12 +471,6 @@ resource "google_storage_bucket" "firmware" {
       type = "Delete"
     }
   }
-}
-
-resource "google_storage_bucket_iam_member" "firmware_public" {
-  bucket = google_storage_bucket.firmware.name
-  role   = "roles/storage.objectViewer"
-  member = "allUsers"
 }
 
 #########################################################################

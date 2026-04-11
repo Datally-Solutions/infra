@@ -32,3 +32,8 @@ output "firestore_database" {
   description = "Firestore database name"
   value       = google_firestore_database.main.name
 }
+
+output "firmware_bucket" {
+  description = "GCS bucket for firmware storage"
+  value       = google_storage_bucket.firmware.name
+}
