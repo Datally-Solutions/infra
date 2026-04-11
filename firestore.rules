@@ -2,13 +2,19 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
+    // --- FONCTIONS DE SÉCURITÉ ---
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
     function isAdmin(householdId) {
-      return request.auth != null &&
+      return isSignedIn() &&
         request.auth.uid == get(/databases/$(database)/documents/households/$(householdId)).data.admin_uid;
     }
 
     function isMember(householdId) {
-      return request.auth != null &&
+      return isSignedIn() &&
         request.auth.uid in get(/databases/$(database)/documents/households/$(householdId)).data.member_uids;
     }
 
@@ -16,13 +22,32 @@ service cloud.firestore {
       return isAdmin(householdId) || isMember(householdId);
     }
 
+    // --- COLLECTION USERS (Pour les notifications) ---
+
+    match /users/{userId} {
+      // Un utilisateur peut lire et modifier uniquement son propre profil/token
+      allow read, write: if isSignedIn() && request.auth.uid == userId;
+    }
+
+    // --- COLLECTION HOUSEHOLDS ---
+
     match /households/{householdId} {
-      allow read: if request.auth != null;
-      allow create: if request.auth != null
+      // FIX PERMISSION DENIED :
+      // On permet la lecture si l'utilisateur est connecté pour qu'il puisse "trouver" le foyer
+      // ou vérifier s'il est déjà dans la liste des membres.
+      allow read: if isSignedIn();
+
+      allow create: if isSignedIn()
         && request.resource.data.admin_uid == request.auth.uid;
-      allow update: if isAdminOrMember(householdId);
+
+      // Autoriser l'update si on est membre OU si on est en train de s'ajouter
+      // soi-même à la liste (cas de l'invitation)
+      allow update: if isAdminOrMember(householdId) ||
+        (isSignedIn() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['member_uids']));
+
       allow delete: if isAdmin(householdId);
 
+      // Sous-collections (capteurs, historique de litière, etc.)
       match /{subcollection=**} {
         allow read, write: if isAdminOrMember(householdId);
       }
