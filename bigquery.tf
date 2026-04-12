@@ -13,7 +13,7 @@ resource "google_bigquery_dataset" "litiere" {
 resource "google_bigquery_table" "classified_events" {
   dataset_id          = google_bigquery_dataset.litiere.dataset_id
   table_id            = "classified_events"
-  deletion_protection = false
+  deletion_protection = true
 
   time_partitioning {
     type  = "DAY"
@@ -42,7 +42,7 @@ resource "google_bigquery_table" "classified_events" {
 resource "google_bigquery_table" "raw_sessions" {
   dataset_id          = google_bigquery_dataset.litiere.dataset_id
   table_id            = "raw_sessions"
-  deletion_protection = false
+  deletion_protection = true
 
   time_partitioning {
     type  = "DAY"
