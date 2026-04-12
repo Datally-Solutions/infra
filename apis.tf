@@ -20,5 +20,5 @@ resource "google_project_service" "apis" {
   ])
 
   service            = each.key
-  disable_on_destroy = true
+  disable_on_destroy = false
 }
