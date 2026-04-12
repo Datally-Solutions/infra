@@ -14,3 +14,8 @@ variable "ingest_token" {
   type        = string
   sensitive   = true
 }
+
+variable "alert_email" {
+  description = "Email address to receive monitoring alert notifications"
+  type        = string
+}

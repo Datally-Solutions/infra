@@ -1,1 +1,2 @@
 ingest_token = "generate-a-strong-random-token-here"
+alert_email  = "your-email@example.com"

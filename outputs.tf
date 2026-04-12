@@ -37,3 +37,8 @@ output "firmware_bucket" {
   description = "GCS bucket for firmware storage"
   value       = google_storage_bucket.firmware.name
 }
+
+output "monitoring_notification_channel" {
+  description = "Monitoring notification channel name (use in alert policies)"
+  value       = google_monitoring_notification_channel.email.name
+}
