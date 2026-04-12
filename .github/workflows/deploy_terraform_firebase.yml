@@ -19,6 +19,7 @@ jobs:
       state_prefix: "infra"
       has_tfvars: "true"
     secrets: inherit
+
   firebase:
     runs-on: ubuntu-latest
     steps:
