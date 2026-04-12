@@ -24,6 +24,8 @@ resource "google_logging_metric" "device_error_count" {
     value_type   = "INT64"
     display_name = "Device Error Count"
   }
+
+  depends_on = [google_project_service.apis]
 }
 
 # Alert: device error rate
