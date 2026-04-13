@@ -8,6 +8,23 @@ on:
   workflow_dispatch:
 
 jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      firebase: ${{ steps.filter.outputs.firebase }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            firebase:
+              - 'firebase.json'
+              - '.firebaserc'
+              - 'firestore.rules'
+              - 'firestore.indexes.json'
+              - 'firestore.tf'
+
   terraform:
     permissions:
       contents: read
@@ -21,8 +38,9 @@ jobs:
     secrets: inherit
 
   firebase:
+    needs: changes
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push' && needs.changes.outputs.firebase == 'true'
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
