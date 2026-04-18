@@ -27,7 +27,7 @@ resource "google_iam_workload_identity_pool_provider" "github" {
     "attribute.repository_owner" = "assertion.repository_owner"
   }
 
-  attribute_condition = "assertion.repository in ['Datally-Solutions/backend', 'Datally-Solutions/infra', 'Datally-Solutions/firmware', 'Datally-Solutions/cicd'] && assertion.repository_owner == 'Datally-Solutions' && assertion.ref == 'refs/heads/main'"
+  attribute_condition = "assertion.repository in ['Datally-Solutions/backend', 'Datally-Solutions/infra', 'Datally-Solutions/firmware', 'Datally-Solutions/cicd'] && assertion.repository_owner == 'Datally-Solutions' && (assertion.ref == 'refs/heads/main' || assertion.ref.startsWith('refs/tags/v'))"
 
   oidc {
     issuer_uri = "https://token.actions.githubusercontent.com"
