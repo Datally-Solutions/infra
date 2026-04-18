@@ -27,7 +27,7 @@ resource "google_iam_workload_identity_pool_provider" "github" {
     "attribute.repository_owner" = "assertion.repository_owner"
   }
 
-  attribute_condition = "assertion.repository in ['Datally-Solutions/backend', 'Datally-Solutions/infra', 'Datally-Solutions/firmware', 'Datally-Solutions/cicd'] && assertion.repository_owner == 'Datally-Solutions'"
+  attribute_condition = "assertion.repository in ['Datally-Solutions/backend', 'Datally-Solutions/infra', 'Datally-Solutions/firmware', 'Datally-Solutions/cicd'] && assertion.repository_owner == 'Datally-Solutions' && assertion.ref == 'refs/heads/main'"
 
   oidc {
     issuer_uri = "https://token.actions.githubusercontent.com"
@@ -215,18 +215,6 @@ resource "google_project_iam_custom_role" "cicd_role" {
     "logging.logMetrics.list",
     "logging.logMetrics.update",
   ]
-}
-
-resource "google_project_iam_member" "cicd_firestore_admin" {
-  project = var.GCP_PROJECT_ID
-  role    = "roles/datastore.owner"
-  member  = "serviceAccount:${google_service_account.cicd_sa.email}"
-}
-
-resource "google_project_iam_member" "cicd_firebase_admin" {
-  project = var.GCP_PROJECT_ID
-  role    = "roles/firebase.admin"
-  member  = "serviceAccount:${google_service_account.cicd_sa.email}"
 }
 
 resource "google_project_iam_member" "cicd_custom_role" {
